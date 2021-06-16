@@ -6,7 +6,7 @@
     <li> Spawns naturally in the taiga</li>
     <li> They are dangerous</li>
 </ul>
-<h2 align=center>Screenshots</h2>
+<h2 align=center>Screenshots(no screenshots)</h2>
 <p align=center>
     <img src="">
     <img src="">
