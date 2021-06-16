@@ -1,0 +1,9 @@
+{
+  "entity.aqupd.brown_bear": "Brown Bear",
+  "item.aqupd.brown_bear_spawn_egg": "Brown Bear Spawn Egg",
+  "subtitles.brown_bear.ambient": "Brown Bear groans",
+  "subtitles.brown_bear.ambient_baby": "Brown Bear hums",
+  "subtitles.brown_bear.death": "Brown Bear dies",
+  "subtitles.brown_bear.hurt": "Brown Bear hurts",
+  "subtitles.brown_bear.warning": "Brown Bear roars"
+}

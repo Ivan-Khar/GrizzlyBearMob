@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "aqupd",
+  "version": "${version}",
+  "name": "Brown Bear mob",
+  "description": "This mod adds brown bears to the game! Almost like polar bears!",
+  "authors": [
+    "AqUpd",
+	"Xeller"
+  ],
+  "contact": {
+    "email": "aquupd@ya.ru",
+    "homepage": "https://vk.com/aqupd",
+    "issues": "https://github.com/AquUpd/BrownBearMob/issues",
+    "sources": "https://github.com/AquUpd/BrownBearMob"
+  },
+  "license": "MIT",
+  "icon": "icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.aqupd.brownbear.Main"
+    ],
+    "client": [
+      "com.aqupd.brownbear.MainClient"
+    ]
+  },
+  "mixins": [
+    "brownbear.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": ">=1.16.2"
+  }
+}
