@@ -1,0 +1,54 @@
+{
+  "grizzly_bear.ambient": {
+    "subtitle": "subtitles.grizzly_bear.ambient",
+    "sounds": [
+      "aqupd:mob/grizzlybear/idle1",
+      "aqupd:mob/grizzlybear/idle2",
+      "aqupd:mob/grizzlybear/idle3",
+      "aqupd:mob/grizzlybear/idle4"
+    ]
+  },
+  "grizzly_bear.ambient_baby": {
+    "subtitle": "subtitles.grizzly_bear.ambient_baby",
+    "sounds": [
+      "aqupd:mob/grizzlybear_baby/idle1",
+      "aqupd:mob/grizzlybear_baby/idle2",
+      "aqupd:mob/grizzlybear_baby/idle3",
+      "aqupd:mob/grizzlybear_baby/idle4"
+    ]
+  },
+  "grizzly_bear.death": {
+    "subtitle": "subtitles.grizzly_bear.death",
+    "sounds": [
+      "aqupd:mob/grizzlybear/death1",
+      "aqupd:mob/grizzlybear/death2",
+      "aqupd:mob/grizzlybear/death3"
+    ]
+  },
+  "grizzly_bear.hurt": {
+    "subtitle": "subtitles.grizzly_bear.hurt",
+    "sounds": [
+      "aqupd:mob/grizzlybear/hurt1",
+      "aqupd:mob/grizzlybear/hurt2",
+      "aqupd:mob/grizzlybear/hurt3",
+      "aqupd:mob/grizzlybear/hurt4"
+    ]
+  },
+  "grizzly_bear.step": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      "aqupd:mob/grizzlybear/step1",
+      "aqupd:mob/grizzlybear/step2",
+      "aqupd:mob/grizzlybear/step3",
+      "aqupd:mob/grizzlybear/step4"
+    ]
+  },
+  "grizzly_bear.warning": {
+    "subtitle": "subtitles.grizzly_bear.warning",
+    "sounds": [
+      "aqupd:mob/grizzlybear/warning1",
+      "aqupd:mob/grizzlybear/warning2",
+      "aqupd:mob/grizzlybear/warning3"
+    ]
+  }
+}

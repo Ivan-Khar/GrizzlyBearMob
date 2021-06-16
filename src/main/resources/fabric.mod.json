@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "aqupd",
+  "version": "${version}",
+  "name": "Grizzly Bear mob",
+  "description": "This mod adds Grizzly bears to the game! Almost like polar bears!",
+  "authors": [
+    "AqUpd",
+	"Xeller"
+  ],
+  "contact": {
+    "email": "aquupd@ya.ru",
+    "homepage": "https://vk.com/aqupd",
+    "issues": "https://github.com/AquUpd/GrizzlyBearMob/issues",
+    "sources": "https://github.com/AquUpd/GrizzlyBearMob"
+  },
+  "license": "MIT",
+  "icon": "icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.aqupd.grizzlybear.Main"
+    ],
+    "client": [
+      "com.aqupd.grizzlybear.MainClient"
+    ]
+  },
+  "mixins": [
+    "grizzlybear.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": ">=1.16.2"
+  }
+}
