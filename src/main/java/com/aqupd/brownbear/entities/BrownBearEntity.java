@@ -37,7 +37,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.IntRange;
 import net.minecraft.util.math.MathHelper;
@@ -60,7 +59,7 @@ public class BrownBearEntity extends AnimalEntity implements Angerable {
     }
 
     public PassiveEntity createChild(ServerWorld world, PassiveEntity entity) {
-        return (PassiveEntity)Main.BROWNBEAR.create(world);
+        return Main.BROWNBEAR.create(world);
     }
 
     public boolean isBreedingItem(ItemStack stack) {
@@ -78,7 +77,7 @@ public class BrownBearEntity extends AnimalEntity implements Angerable {
         this.goalSelector.add(7, new LookAroundGoal(this));
         this.targetSelector.add(1, new BrownBearEntity.BrownBearRevengeGoal());
         this.targetSelector.add(2, new BrownBearEntity.FollowPlayersGoal());
-        this.targetSelector.add(3, new FollowTargetGoal(this, PlayerEntity.class, 10, true, false, this::shouldAngerAt));
+        this.targetSelector.add(3, new FollowTargetGoal<>(this, PlayerEntity.class, 10, true, false, this::shouldAngerAt));
         this.targetSelector.add(4, new FollowTargetGoal(this, FoxEntity.class, 10, true, true, (Predicate) null));
         this.targetSelector.add(4, new FollowTargetGoal(this, RabbitEntity.class, 10, true, true, (Predicate) null));
         this.targetSelector.add(4, new FollowTargetGoal(this, ChickenEntity.class, 10, true, true, (Predicate) null));
