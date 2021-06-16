@@ -1,12 +1,13 @@
 {
   "schemaVersion": 1,
-  "id": "aqupd",
+  "id": "aqupdgrizzly",
   "version": "${version}",
   "name": "Grizzly Bear mob",
   "description": "This mod adds Grizzly bears to the game! Almost like polar bears!",
   "authors": [
     "AqUpd",
-	"Xeller"
+	"Xeller",
+	"glowsand"
   ],
   "contact": {
     "email": "aquupd@ya.ru",
