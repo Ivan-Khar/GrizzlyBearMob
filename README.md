@@ -9,8 +9,8 @@
 <h2 align=center>Screenshots</h2>
 <p align=center>
     <img src="https://imgur.com/WbqdjNA.png">
-    <img src="https://imgur.com/HigYRoA.png">
-    <img src="https://imgur.com/6g4ezAo.png">
+    <img src="https://imgur.com/ekEbmqd.png">
+    <img src="https://imgur.com/MWTQMF5.png">
 </p>
 <h1 align=center>Fishing made by glowsand</h1>
 <h1 align=center>https://www.curseforge.com/minecraft/mc-mods/fishy-bears</h1>
