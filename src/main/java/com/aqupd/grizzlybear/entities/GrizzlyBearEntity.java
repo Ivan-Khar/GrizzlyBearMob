@@ -92,7 +92,6 @@ public class GrizzlyBearEntity extends AnimalEntity implements Angerable {
         this.targetSelector.add(4, new FollowTargetGoal(this, FoxEntity.class, 10, true, true, (Predicate) null));
         this.targetSelector.add(4, new FollowTargetGoal(this, RabbitEntity.class, 10, true, true, (Predicate) null));
         this.targetSelector.add(4, new FollowTargetGoal(this, ChickenEntity.class, 10, true, true, (Predicate) null));
-        this.targetSelector.add(4, new FollowTargetGoal(this, BeeEntity.class, 10, true, true, (Predicate) null));
         this.targetSelector.add(5, new UniversalAngerGoal(this, false));
     }
 
