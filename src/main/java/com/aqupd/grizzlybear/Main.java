@@ -58,7 +58,7 @@ public class Main implements ModInitializer {
 				selection -> selection.getBiome().getCategory() == Biome.Category.TAIGA,
 				SpawnGroup.CREATURE,
 				GRIZZLYBEAR,
-				4, 2, 4 // weight/min group size/max group size
+				60, 2, 4 // weight/min group size/max group size
 		);
 		logInfo("Grizzly Bears mod is loaded!");
 	}
