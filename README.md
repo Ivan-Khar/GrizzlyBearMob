@@ -1,4 +1,4 @@
-<h1 align=center>Brown Bear for 1.17</h1>
+<h1 align=center>Grizzly Bear for 1.17</h1>
 <h2 align=center>Fabric and Fabric API required!</h2>
 <ul>
     <li> This mod adds Grizzly Bears to your world!</li>
