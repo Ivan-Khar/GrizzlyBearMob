@@ -16,10 +16,9 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
 
-import static com.aqupd.grizzlybear.utils.AqLogger.logInfo;
+import static com.aqupd.grizzlybear.utils.AqLogger.*;
 
 public class Main implements ModInitializer {
-
 	public static final EntityType<GrizzlyBearEntity> GRIZZLYBEAR = Registry.register(
 			Registry.ENTITY_TYPE,
 			new Identifier("aqupd", "grizzly_bear"),
@@ -58,7 +57,7 @@ public class Main implements ModInitializer {
 				selection -> selection.getBiome().getCategory() == Biome.Category.TAIGA,
 				SpawnGroup.CREATURE,
 				GRIZZLYBEAR,
-				60, 2, 4 // weight/min group size/max group size
+				50, 2, 4 // weight/min group size/max group size
 		);
 		logInfo("Grizzly Bears mod is loaded!");
 	}
