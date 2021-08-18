@@ -63,6 +63,9 @@ public class GrizzlyBearEntity extends AnimalEntity implements Angerable {
     private static double speed = AqConfig.INSTANCE.getDoubleProperty("entity.speed");
     private static double follow = AqConfig.INSTANCE.getDoubleProperty("entity.follow");
     private static double damage = AqConfig.INSTANCE.getDoubleProperty("entity.damage");
+    private static int angermin = AqConfig.INSTANCE.getNumberProperty("entity.angertimemin");
+    private static int angermax = AqConfig.INSTANCE.getNumberProperty("entity.angertimemax");
+    private static boolean friendly = AqConfig.INSTANCE.getBooleanProperty("entity.friendlytoplayer");
 
     public GrizzlyBearEntity(EntityType<? extends GrizzlyBearEntity> entityType, World world) {
         super(entityType, world);
@@ -99,7 +102,7 @@ public class GrizzlyBearEntity extends AnimalEntity implements Angerable {
         this.goalSelector.add(7, new LookAroundGoal(this));
         this.targetSelector.add(1, new GrizzlyBearEntity.GrizzlyBearRevengeGoal());
         this.targetSelector.add(2, new GrizzlyBearEntity.FollowPlayersGoal());
-        this.targetSelector.add(3, new FollowTargetGoal<>(this, PlayerEntity.class, 10, true, false, this::shouldAngerAt));
+        if (friendly) this.targetSelector.add(3, new FollowTargetGoal<>(this, PlayerEntity.class, 10, true, false, this::shouldAngerAt));
         this.targetSelector.add(4, new FollowTargetGoal<>(this, FoxEntity.class, 10, true, true, null));
         this.targetSelector.add(4, new FollowTargetGoal<>(this, RabbitEntity.class, 10, true, true, null));
         this.targetSelector.add(4, new FollowTargetGoal<>(this, ChickenEntity.class, 10, true, true, null));
@@ -245,7 +248,7 @@ public class GrizzlyBearEntity extends AnimalEntity implements Angerable {
 
     static {
         WARNING = DataTracker.registerData(GrizzlyBearEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-        ANGER_TIME_RANGE = Durations.betweenSeconds(20, 39);
+        ANGER_TIME_RANGE = Durations.betweenSeconds(angermin, angermax);
         LOVINGFOOD = Ingredient.ofItems(Items.COD, Items.SALMON, Items.SWEET_BERRIES);
     }
 
