@@ -1,8 +1,11 @@
 package com.aqupd.grizzlybear;
 
 import com.aqupd.grizzlybear.entities.GrizzlyBearEntity;
+import com.aqupd.grizzlybear.utils.AqConfig;
+import com.aqupd.grizzlybear.utils.AqDebug;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
@@ -16,9 +19,18 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
 
+import java.util.Arrays;
+
 import static com.aqupd.grizzlybear.utils.AqLogger.*;
 
 public class Main implements ModInitializer {
+
+	int weight = AqConfig.INSTANCE.getNumberProperty("spawn.weight");
+	int mingroup = AqConfig.INSTANCE.getNumberProperty("spawn.min");
+	int maxgroup = AqConfig.INSTANCE.getNumberProperty("spawn.max");
+
+	String[] biomelist = AqConfig.INSTANCE.getStringProperty("spawn.biomes").split(",");
+
 	public static final EntityType<GrizzlyBearEntity> GRIZZLYBEAR = Registry.register(
 			Registry.ENTITY_TYPE,
 			new Identifier("aqupd", "grizzly_bear"),
@@ -43,6 +55,10 @@ public class Main implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		ServerWorldEvents.LOAD.register((server, world) -> {
+			AqDebug.INSTANCE.startDebug(AqConfig.INSTANCE.getBooleanProperty("debug"));
+		});
+
 		Registry.register(Registry.SOUND_EVENT, Main.ENTITY_GRIZZLY_BEAR_AMBIENT, GRIZZLY_BEAR_AMBIENT);
 		Registry.register(Registry.SOUND_EVENT, Main.ENTITY_GRIZZLY_BEAR_AMBIENT_BABY, GRIZZLY_BEAR_AMBIENT_BABY);
 		Registry.register(Registry.SOUND_EVENT, Main.ENTITY_GRIZZLY_BEAR_DEATH, GRIZZLY_BEAR_DEATH);
@@ -54,10 +70,10 @@ public class Main implements ModInitializer {
 		FabricDefaultAttributeRegistry.register(GRIZZLYBEAR, com.aqupd.grizzlybear.entities.GrizzlyBearEntity.createGrizzlyBearAttributes());
 
 		BiomeModifications.addSpawn(
-				selection -> selection.getBiome().getCategory() == Biome.Category.TAIGA,
+				selection -> Arrays.stream(biomelist).anyMatch(x -> x.equals(selection.getBiome().getCategory().getName().toUpperCase())),
 				SpawnGroup.CREATURE,
 				GRIZZLYBEAR,
-				50, 2, 4 // weight/min group size/max group size
+				weight, mingroup, maxgroup // weight/min group size/max group size
 		);
 		logInfo("Grizzly Bears mod is loaded!");
 	}

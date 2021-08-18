@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import com.aqupd.grizzlybear.Main;
 import com.aqupd.grizzlybear.ai.*;
+import com.aqupd.grizzlybear.utils.AqConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -58,6 +59,11 @@ public class GrizzlyBearEntity extends AnimalEntity implements Angerable {
     private int angerTime;
     private UUID targetUuid;
 
+    private static double health = AqConfig.INSTANCE.getDoubleProperty("entity.health");
+    private static double speed = AqConfig.INSTANCE.getDoubleProperty("entity.speed");
+    private static double follow = AqConfig.INSTANCE.getDoubleProperty("entity.follow");
+    private static double damage = AqConfig.INSTANCE.getDoubleProperty("entity.damage");
+
     public GrizzlyBearEntity(EntityType<? extends GrizzlyBearEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -102,7 +108,11 @@ public class GrizzlyBearEntity extends AnimalEntity implements Angerable {
     }
 
     public static Builder createGrizzlyBearAttributes() {
-        return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 30.0D).add(EntityAttributes.GENERIC_FOLLOW_RANGE, 20.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 6.0D);
+        return MobEntity.createMobAttributes()
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, health)
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, follow)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, speed)
+                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, damage);
     }
 
     public void readCustomDataFromNbt(NbtCompound nbt) {
