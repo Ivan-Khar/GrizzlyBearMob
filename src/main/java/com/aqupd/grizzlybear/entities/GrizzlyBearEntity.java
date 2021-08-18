@@ -12,6 +12,7 @@ import java.util.function.Predicate;
 
 import com.aqupd.grizzlybear.Main;
 import com.aqupd.grizzlybear.ai.GrizzlyBearFishGoal;
+import com.aqupd.grizzlybear.utils.AqConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -51,6 +52,13 @@ public class GrizzlyBearEntity extends AnimalEntity implements Angerable {
     private static final Ingredient LOVINGFOOD;
     private int angerTime;
     private UUID targetUuid;
+    private static double health = AqConfig.INSTANCE.getDoubleProperty("entity.health");
+    private static double speed = AqConfig.INSTANCE.getDoubleProperty("entity.speed");
+    private static double follow = AqConfig.INSTANCE.getDoubleProperty("entity.follow");
+    private static double damage = AqConfig.INSTANCE.getDoubleProperty("entity.damage");
+    private static int angermin = AqConfig.INSTANCE.getNumberProperty("entity.angertimemin");
+    private static int angermax = AqConfig.INSTANCE.getNumberProperty("entity.angertimemax");
+    private static boolean friendly = AqConfig.INSTANCE.getBooleanProperty("entity.friendlytoplayer");
 
     public GrizzlyBearEntity(EntityType<? extends GrizzlyBearEntity> entityType, World world) {
         super(entityType, world);
@@ -69,8 +77,7 @@ public class GrizzlyBearEntity extends AnimalEntity implements Angerable {
         if (!bl && !player.shouldCancelInteraction()) {
             return ActionResult.success(this.world.isClient);
         } else {
-            ActionResult actionResult = super.interactMob(player, hand);
-            return actionResult;
+            return super.interactMob(player, hand);
         }
     }
 
@@ -82,21 +89,24 @@ public class GrizzlyBearEntity extends AnimalEntity implements Angerable {
         this.goalSelector.add(2, new AnimalMateGoal(this, 1.0D));
         this.goalSelector.add(3, new TemptGoal(this, 1.0D, false, LOVINGFOOD));
         this.goalSelector.add(4, new FollowParentGoal(this, 1.25D));
-        this.goalSelector.add(5, new GrizzlyBearFishGoal(((GrizzlyBearEntity)(Object)this),1.0D,20));
+        this.goalSelector.add(5, new GrizzlyBearFishGoal(((GrizzlyBearEntity) this),1.0D,20));
         this.goalSelector.add(5, new WanderAroundGoal(this, 1.0D));
         this.goalSelector.add(6, new LookAtEntityGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.add(7, new LookAroundGoal(this));
         this.targetSelector.add(1, new GrizzlyBearEntity.GrizzlyBearRevengeGoal());
         this.targetSelector.add(2, new GrizzlyBearEntity.FollowPlayersGoal());
-        this.targetSelector.add(3, new FollowTargetGoal<>(this, PlayerEntity.class, 10, true, false, this::shouldAngerAt));
-        this.targetSelector.add(4, new FollowTargetGoal(this, FoxEntity.class, 10, true, true, (Predicate) null));
+        if (friendly) this.targetSelector.add(3, new FollowTargetGoal<>(this, PlayerEntity.class, 10, true, false, this::shouldAngerAt));this.targetSelector.add(4, new FollowTargetGoal(this, FoxEntity.class, 10, true, true, (Predicate) null));
         this.targetSelector.add(4, new FollowTargetGoal(this, RabbitEntity.class, 10, true, true, (Predicate) null));
         this.targetSelector.add(4, new FollowTargetGoal(this, ChickenEntity.class, 10, true, true, (Predicate) null));
         this.targetSelector.add(5, new UniversalAngerGoal(this, false));
     }
 
     public static Builder createGrizzlyBearAttributes() {
-        return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 30.0D).add(EntityAttributes.GENERIC_FOLLOW_RANGE, 20.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 6.0D);
+        return MobEntity.createMobAttributes()
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, health)
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, follow)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, speed)
+                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, damage);
     }
 
     public void readCustomDataFromTag(CompoundTag tag) {
@@ -229,7 +239,7 @@ public class GrizzlyBearEntity extends AnimalEntity implements Angerable {
 
     static {
         WARNING = DataTracker.registerData(GrizzlyBearEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-        ANGER_TIME_RANGE = Durations.betweenSeconds(20, 39);
+        ANGER_TIME_RANGE = Durations.betweenSeconds(angermin, angermax);
         LOVINGFOOD = Ingredient.ofItems(Items.COD, Items.SALMON, Items.SWEET_BERRIES);
     }
 
@@ -239,7 +249,7 @@ public class GrizzlyBearEntity extends AnimalEntity implements Angerable {
         }
 
         public boolean canStart() {
-            return !GrizzlyBearEntity.this.isBaby() && !GrizzlyBearEntity.this.isOnFire() ? false : super.canStart();
+            return (GrizzlyBearEntity.this.isBaby() || GrizzlyBearEntity.this.isOnFire()) && super.canStart();
         }
     }
 

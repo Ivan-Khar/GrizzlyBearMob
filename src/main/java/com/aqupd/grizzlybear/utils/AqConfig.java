@@ -48,13 +48,15 @@ public class AqConfig {
                 aqprop.setProperty("spawn.weight","50");
                 aqprop.setProperty("spawn.min","2");
                 aqprop.setProperty("spawn.max","4");
-                aqprop.setProperty("entity.health","10.0");
-                aqprop.setProperty("entity.speed","0.3");
+                aqprop.setProperty("entity.angertimemin","20");
+                aqprop.setProperty("entity.angertimemax","39");
+                aqprop.setProperty("entity.friendlytoplayer","false");
+                aqprop.setProperty("entity.health","30.0");
+                aqprop.setProperty("entity.speed","0.25");
                 aqprop.setProperty("entity.follow","20.0");
-                aqprop.setProperty("entity.damage","2.5");
-                aqprop.setProperty("entity.knockback","0.5");
-                aqprop.setProperty("spawn.biomes","SAVANNA");
-                aqprop.store(writer, "Configuration file for Caracal mod");
+                aqprop.setProperty("entity.damage","6.0");
+                aqprop.setProperty("spawn.biomes","TAIGA");
+                aqprop.store(writer, "Configuration file for Grizzly bear mod");
                 writer.close();
             }
         } catch (IOException e) {
