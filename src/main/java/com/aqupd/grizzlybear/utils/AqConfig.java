@@ -38,7 +38,7 @@ public class AqConfig {
         try {
             new File("./config/AqMods").mkdir();
 
-            if(file.exists()) {
+            if(file.exists() && file.length() != 0) {
                 var reader = new FileReader(file);
                 aqprop.load(reader);
                 reader.close();
