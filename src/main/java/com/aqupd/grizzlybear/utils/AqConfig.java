@@ -29,7 +29,7 @@ public class AqConfig {
         return Double.parseDouble(aqprop.getProperty(key));
     }
 
-    private final File file = new File("./config/AqMods/caracal.config");
+    private File file = new File("./config/AqMods/grizzly.config");
 
     private void load() {
         loaded = true;
@@ -50,7 +50,7 @@ public class AqConfig {
                 aqprop.setProperty("spawn.max","4");
                 aqprop.setProperty("entity.angertimemin","20");
                 aqprop.setProperty("entity.angertimemax","39");
-                aqprop.setProperty("entity.friendlytoplayer","false");
+                aqprop.setProperty("entity.friendly","false");
                 aqprop.setProperty("entity.health","30.0");
                 aqprop.setProperty("entity.speed","0.25");
                 aqprop.setProperty("entity.follow","20.0");

@@ -51,13 +51,13 @@ public class GrizzlyBearEntity extends AnimalEntity implements Angerable {
     private int angerTime;
     private UUID targetUuid;
 
-    private static final double health = AqConfig.INSTANCE.getDoubleProperty("entity.health");
-    private static final double speed = AqConfig.INSTANCE.getDoubleProperty("entity.speed");
-    private static final double follow = AqConfig.INSTANCE.getDoubleProperty("entity.follow");
-    private static final double damage = AqConfig.INSTANCE.getDoubleProperty("entity.damage");
-    private static final int angermin = AqConfig.INSTANCE.getNumberProperty("entity.angertimemin");
-    private static final int angermax = AqConfig.INSTANCE.getNumberProperty("entity.angertimemax");
-    private static final boolean friendly = AqConfig.INSTANCE.getBooleanProperty("entity.friendlytoplayer");
+    private static double health = AqConfig.INSTANCE.getDoubleProperty("entity.health");
+    private static double speed = AqConfig.INSTANCE.getDoubleProperty("entity.speed");
+    private static double follow = AqConfig.INSTANCE.getDoubleProperty("entity.follow");
+    private static double damage = AqConfig.INSTANCE.getDoubleProperty("entity.damage");
+    private static int angermin = AqConfig.INSTANCE.getNumberProperty("entity.angertimemin");
+    private static int angermax = AqConfig.INSTANCE.getNumberProperty("entity.angertimemax");
+    private static boolean friendly = AqConfig.INSTANCE.getBooleanProperty("entity.friendlytoplayer");
 
     public GrizzlyBearEntity(EntityType<? extends GrizzlyBearEntity> entityType, World world) {
         super(entityType, world);
@@ -93,11 +93,13 @@ public class GrizzlyBearEntity extends AnimalEntity implements Angerable {
         this.goalSelector.add(6, new LookAtEntityGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.add(7, new LookAroundGoal(this));
         this.targetSelector.add(1, new GrizzlyBearEntity.GrizzlyBearRevengeGoal());
-        this.targetSelector.add(2, new GrizzlyBearEntity.FollowPlayersGoal());
-        if (friendly) this.targetSelector.add(3, new FollowTargetGoal<>(this, PlayerEntity.class, 10, true, false, this::shouldAngerAt));this.targetSelector.add(4, new FollowTargetGoal(this, FoxEntity.class, 10, true, true, null));
-        this.targetSelector.add(4, new FollowTargetGoal(this, RabbitEntity.class, 10, true, true, null));
-        this.targetSelector.add(4, new FollowTargetGoal(this, ChickenEntity.class, 10, true, true, null));
-        this.targetSelector.add(5, new UniversalAngerGoal(this, false));
+        if (!friendly) {
+            this.targetSelector.add(2, new GrizzlyBearEntity.FollowPlayersGoal());
+            this.targetSelector.add(3, new FollowTargetGoal<>(this, PlayerEntity.class, 10, true, false, this::shouldAngerAt));this.targetSelector.add(4, new FollowTargetGoal(this, FoxEntity.class, 10, true, true, null));
+            this.targetSelector.add(4, new FollowTargetGoal(this, RabbitEntity.class, 10, true, true, null));
+            this.targetSelector.add(4, new FollowTargetGoal(this, ChickenEntity.class, 10, true, true, null));
+            this.targetSelector.add(5, new UniversalAngerGoal(this, false));
+        }
     }
 
     public static Builder createGrizzlyBearAttributes() {

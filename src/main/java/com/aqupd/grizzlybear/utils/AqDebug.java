@@ -19,7 +19,7 @@ public class AqDebug {
         if(key && !loaded) load();
     }
 
-    private final File dfile = new File("./config/AqMods/biomes.config");
+    private File dfile = new File("./config/AqMods/biomes.config");
 
     private void load() {
         loaded = true;
