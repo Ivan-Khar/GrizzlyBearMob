@@ -19,8 +19,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import static com.aqupd.grizzlybear.utils.AqLogger.logInfo;
 
@@ -31,7 +29,6 @@ public class Main implements ModInitializer {
 	int maxgroup = AqConfig.INSTANCE.getNumberProperty("spawn.max");
 
 	String[] biomelist = AqConfig.INSTANCE.getStringProperty("spawn.biomes").split(",");
-	Set<String> biomeSet = new HashSet(Arrays.asList(biomelist));
 
 	public static final EntityType<GrizzlyBearEntity> GRIZZLYBEAR = Registry.register(
 			Registry.ENTITY_TYPE,

@@ -29,7 +29,6 @@ public class GrizzlyBearEntityModel<T extends GrizzlyBearEntity> extends Quadrup
         this.torso.setTextureOffset(0, 19).addCuboid(-5.0F, -13.0F, -7.0F, 14.0F, 14.0F, 11.0F, 0.0F);
         this.torso.setTextureOffset(39, 0).addCuboid(-4.0F, -25.0F, -7.0F, 12.0F, 12.0F, 10.0F, 0.0F);
         this.torso.setPivot(-2.0F, 9.0F, 12.0F);
-        boolean i = true;
         this.backRightLeg = new ModelPart(this, 50, 22);
         this.backRightLeg.addCuboid(-2.0F, 0.0F, -2.0F, 4.0F, 10.0F, 8.0F, 0.0F);
         this.backRightLeg.setPivot(-3.5F, 14.0F, 6.0F);

@@ -9,7 +9,7 @@ public class AqConfig {
     public static final AqConfig INSTANCE = new AqConfig();
 
     private boolean loaded;
-    private Properties aqprop = new Properties();
+    private final Properties aqprop = new Properties();
 
 
     public boolean getBooleanProperty(String key) {
@@ -29,7 +29,7 @@ public class AqConfig {
         return Double.parseDouble(aqprop.getProperty(key));
     }
 
-    private File file = new File("./config/AqMods/caracal.config");
+    private final File file = new File("./config/AqMods/caracal.config");
 
     private void load() {
         loaded = true;

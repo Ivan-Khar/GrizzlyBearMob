@@ -21,6 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldView;
 
 import java.util.List;
+import java.util.Objects;
 
 
 public class GrizzlyBearFishGoal extends MoveToTargetPosGoal {
@@ -76,7 +77,7 @@ public class GrizzlyBearFishGoal extends MoveToTargetPosGoal {
         if (this.hasReached() && upTick <= 0){
             ((GrizzlyBearEntity)this.mob).setWarning(false);
             LootContext.Builder builder = (new LootContext.Builder((ServerWorld)this.mob.world)).parameter(LootContextParameters.ORIGIN, this.mob.getPos()).parameter(LootContextParameters.THIS_ENTITY, this.mob).random(this.mob.getRandom());
-            LootTable lootTable = this.mob.world.getServer().getLootManager().getTable(LootTables.FISHING_GAMEPLAY);
+            LootTable lootTable = Objects.requireNonNull(this.mob.world.getServer()).getLootManager().getTable(LootTables.FISHING_GAMEPLAY);
             List<ItemStack> list = lootTable.generateLoot(builder.build(LootContextTypes.COMMAND));
             for (ItemStack itemStack: list) {
                 if (!itemStack.getItem().isIn(ItemTags.FISHES) || this.mob.getRandom().nextInt(3)==1) {
