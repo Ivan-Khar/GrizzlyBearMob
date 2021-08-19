@@ -101,13 +101,15 @@ public class GrizzlyBearEntity extends AnimalEntity implements Angerable {
         this.goalSelector.add(6, new LookAtEntityGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.add(7, new LookAroundGoal(this));
         this.targetSelector.add(1, new GrizzlyBearEntity.GrizzlyBearRevengeGoal());
-        this.targetSelector.add(2, new GrizzlyBearEntity.FollowPlayersGoal());
-        if (friendly) this.targetSelector.add(3, new FollowTargetGoal<>(this, PlayerEntity.class, 10, true, false, this::shouldAngerAt));
-        this.targetSelector.add(4, new FollowTargetGoal<>(this, FoxEntity.class, 10, true, true, null));
-        this.targetSelector.add(4, new FollowTargetGoal<>(this, RabbitEntity.class, 10, true, true, null));
-        this.targetSelector.add(4, new FollowTargetGoal<>(this, ChickenEntity.class, 10, true, true, null));
-        this.targetSelector.add(4, new FollowTargetGoal<>(this, BeeEntity.class, 10, true, true, null));
-        this.targetSelector.add(5, new UniversalAngerGoal<>(this, false));
+        if (!friendly) {
+            this.targetSelector.add(2, new GrizzlyBearEntity.FollowPlayersGoal());
+            this.targetSelector.add(3, new FollowTargetGoal<>(this, PlayerEntity.class, 10, true, false, this::shouldAngerAt));
+            this.targetSelector.add(4, new FollowTargetGoal<>(this, FoxEntity.class, 10, true, true, null));
+            this.targetSelector.add(4, new FollowTargetGoal<>(this, RabbitEntity.class, 10, true, true, null));
+            this.targetSelector.add(4, new FollowTargetGoal<>(this, ChickenEntity.class, 10, true, true, null));
+            this.targetSelector.add(4, new FollowTargetGoal<>(this, BeeEntity.class, 10, true, true, null));
+            this.targetSelector.add(5, new UniversalAngerGoal<>(this, false));
+        }
     }
 
     public static Builder createGrizzlyBearAttributes() {

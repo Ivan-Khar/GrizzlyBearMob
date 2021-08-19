@@ -52,7 +52,7 @@ public class AqConfig {
                 aqprop.setProperty("spawn.max","4");
                 aqprop.setProperty("entity.angertimemin","20");
                 aqprop.setProperty("entity.angertimemax","39");
-                aqprop.setProperty("entity.friendlytoplayer","false");
+                aqprop.setProperty("entity.friendly","false");
                 aqprop.setProperty("entity.health","30.0");
                 aqprop.setProperty("entity.speed","0.25");
                 aqprop.setProperty("entity.follow","20.0");
