@@ -3,6 +3,8 @@ package com.aqupd.grizzlybear.utils;
 import net.minecraft.entity.attribute.EntityAttributes;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 public class AqConfig {
@@ -31,12 +33,12 @@ public class AqConfig {
         return Double.parseDouble(aqprop.getProperty(key));
     }
 
-    private File file = new File("./config/AqMods/grizzly.config");
+    private final File file = new File("./config/AqMods/grizzly.config");
 
     private void load() {
         loaded = true;
         try {
-            new File("./config/AqMods").mkdir();
+            Files.createDirectories(Paths.get("./config/AqMods/"));
 
             if(file.exists() && file.length() != 0) {
                 var reader = new FileReader(file);

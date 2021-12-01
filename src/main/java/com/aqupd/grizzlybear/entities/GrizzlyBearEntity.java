@@ -5,8 +5,10 @@
 
 package com.aqupd.grizzlybear.entities;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 import com.aqupd.grizzlybear.Main;
 import com.aqupd.grizzlybear.ai.*;
@@ -21,7 +23,6 @@ import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.Durations;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.attribute.DefaultAttributeContainer.Builder;
@@ -41,6 +42,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.TimeHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
@@ -102,12 +104,12 @@ public class GrizzlyBearEntity extends AnimalEntity implements Angerable {
         this.goalSelector.add(7, new LookAroundGoal(this));
         this.targetSelector.add(1, new GrizzlyBearEntity.GrizzlyBearRevengeGoal());
         if (!friendly) {
-            this.targetSelector.add(2, new GrizzlyBearEntity.FollowPlayersGoal());
-            this.targetSelector.add(3, new FollowTargetGoal<>(this, PlayerEntity.class, 10, true, false, this::shouldAngerAt));
-            this.targetSelector.add(4, new FollowTargetGoal<>(this, FoxEntity.class, 10, true, true, null));
-            this.targetSelector.add(4, new FollowTargetGoal<>(this, RabbitEntity.class, 10, true, true, null));
-            this.targetSelector.add(4, new FollowTargetGoal<>(this, ChickenEntity.class, 10, true, true, null));
-            this.targetSelector.add(4, new FollowTargetGoal<>(this, BeeEntity.class, 10, true, true, null));
+            this.targetSelector.add(2, new GrizzlyBearEntity.ProtectBabiesGoal());
+            this.targetSelector.add(3, new ActiveTargetGoal<>(this, PlayerEntity.class, 10, true, false, this::shouldAngerAt));
+            this.targetSelector.add(4, new ActiveTargetGoal<>(this, FoxEntity.class, 10, true, true, null));
+            this.targetSelector.add(4, new ActiveTargetGoal<>(this, RabbitEntity.class, 10, true, true, null));
+            this.targetSelector.add(4, new ActiveTargetGoal<>(this, ChickenEntity.class, 10, true, true, null));
+            this.targetSelector.add(4, new ActiveTargetGoal<>(this, BeeEntity.class, 10, true, true, null));
             this.targetSelector.add(5, new UniversalAngerGoal<>(this, false));
         }
     }
@@ -133,6 +135,7 @@ public class GrizzlyBearEntity extends AnimalEntity implements Angerable {
     public void chooseRandomAngerTime() {
         this.setAngerTime(ANGER_TIME_RANGE.get(this.random));
     }
+
 
     public void setAngerTime(int ticks) {
         this.angerTime = ticks;
@@ -250,7 +253,7 @@ public class GrizzlyBearEntity extends AnimalEntity implements Angerable {
 
     static {
         WARNING = DataTracker.registerData(GrizzlyBearEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-        ANGER_TIME_RANGE = Durations.betweenSeconds(angermin, angermax);
+        ANGER_TIME_RANGE = TimeHelper.betweenSeconds(20, 39);
         LOVINGFOOD = Ingredient.ofItems(Items.COD, Items.SALMON, Items.SWEET_BERRIES);
     }
 
@@ -302,35 +305,9 @@ public class GrizzlyBearEntity extends AnimalEntity implements Angerable {
         }
     }
 
-    class FollowPlayersGoal extends FollowTargetGoal<PlayerEntity> {
-        public FollowPlayersGoal() {
-            super(GrizzlyBearEntity.this, PlayerEntity.class, 20, true, true, null);
-        }
-
-        public boolean canStart() {
-            if (!GrizzlyBearEntity.this.isBaby()) {
-                if (super.canStart()) {
-                    List<GrizzlyBearEntity> list = GrizzlyBearEntity.this.world.getNonSpectatingEntities(GrizzlyBearEntity.class, GrizzlyBearEntity.this.getBoundingBox().expand(8.0D, 4.0D, 8.0D));
-
-                    for (GrizzlyBearEntity grizzlyBearEntity : list) {
-                        if (grizzlyBearEntity.isBaby()) {
-                            return true;
-                        }
-                    }
-                }
-
-            }
-            return false;
-        }
-
-        protected double getFollowRange() {
-            return super.getFollowRange() * 0.5D;
-        }
-    }
-
     class GrizzlyBearRevengeGoal extends RevengeGoal {
         public GrizzlyBearRevengeGoal() {
-            super(GrizzlyBearEntity.this);
+            super(GrizzlyBearEntity.this, new Class[0]);
         }
 
         public void start() {
@@ -347,6 +324,36 @@ public class GrizzlyBearEntity extends AnimalEntity implements Angerable {
                 super.setMobEntityTarget(mob, target);
             }
 
+        }
+    }
+
+    class ProtectBabiesGoal extends ActiveTargetGoal<PlayerEntity> {
+        public ProtectBabiesGoal() {
+            super(GrizzlyBearEntity.this, PlayerEntity.class, 20, true, true, null);
+        }
+
+        public boolean canStart() {
+            if (GrizzlyBearEntity.this.isBaby()) {
+                return false;
+            } else {
+                if (super.canStart()) {
+                    List<PolarBearEntity> list = GrizzlyBearEntity.this.world.getNonSpectatingEntities(PolarBearEntity.class, GrizzlyBearEntity.this.getBoundingBox().expand(8.0D, 4.0D, 8.0D));
+                    Iterator var2 = list.iterator();
+
+                    while(var2.hasNext()) {
+                        GrizzlyBearEntity grizzlyBearEntity = (GrizzlyBearEntity)var2.next();
+                        if (grizzlyBearEntity.isBaby()) {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            }
+        }
+
+        protected double getFollowRange() {
+            return super.getFollowRange() * 0.5D;
         }
     }
 }
