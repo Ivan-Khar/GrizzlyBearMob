@@ -78,6 +78,5 @@ public class Main implements ModInitializer {
 		);
 		SpawnRestrictionAccessor.callRegister(GRIZZLYBEAR, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MobEntity::canMobSpawn);
 		logInfo("Grizzly Bears mod is loaded!");
-		//485886985332889601 /execute in minecraft:overworld run tp @s 1120.30 76.06 966.16 -390.30 57.15
 	}
 }

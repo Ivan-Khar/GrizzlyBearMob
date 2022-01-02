@@ -5,10 +5,8 @@
 
 package com.aqupd.grizzlybear.entities;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Predicate;
 
 import com.aqupd.grizzlybear.Main;
 import com.aqupd.grizzlybear.ai.*;
@@ -307,7 +305,7 @@ public class GrizzlyBearEntity extends AnimalEntity implements Angerable {
 
     class GrizzlyBearRevengeGoal extends RevengeGoal {
         public GrizzlyBearRevengeGoal() {
-            super(GrizzlyBearEntity.this, new Class[0]);
+            super(GrizzlyBearEntity.this);
         }
 
         public void start() {
@@ -333,23 +331,19 @@ public class GrizzlyBearEntity extends AnimalEntity implements Angerable {
         }
 
         public boolean canStart() {
-            if (GrizzlyBearEntity.this.isBaby()) {
-                return false;
-            } else {
+            if (!GrizzlyBearEntity.this.isBaby()) {
                 if (super.canStart()) {
-                    List<PolarBearEntity> list = GrizzlyBearEntity.this.world.getNonSpectatingEntities(PolarBearEntity.class, GrizzlyBearEntity.this.getBoundingBox().expand(8.0D, 4.0D, 8.0D));
-                    Iterator var2 = list.iterator();
+                    List<GrizzlyBearEntity> list = GrizzlyBearEntity.this.world.getNonSpectatingEntities(GrizzlyBearEntity.class, GrizzlyBearEntity.this.getBoundingBox().expand(8.0D, 4.0D, 8.0D));
 
-                    while(var2.hasNext()) {
-                        GrizzlyBearEntity grizzlyBearEntity = (GrizzlyBearEntity)var2.next();
+                    for (GrizzlyBearEntity grizzlyBearEntity : list) {
                         if (grizzlyBearEntity.isBaby()) {
                             return true;
                         }
                     }
                 }
 
-                return false;
             }
+            return false;
         }
 
         protected double getFollowRange() {

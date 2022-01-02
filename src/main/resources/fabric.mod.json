@@ -27,9 +27,7 @@
       "com.aqupd.grizzlybear.MainClient"
     ]
   },
-  "mixins": [
-    "grizzlybear.mixins.json"
-  ],
+  "mixins": [],
   "depends": {
     "fabricloader": ">=0.11.3",
     "fabric": "*",
