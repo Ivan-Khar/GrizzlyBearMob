@@ -37,6 +37,10 @@ processResources {
 	}
 }
 
+loom {
+	accessWidenerPath = file("src/main/resources/aqupdgrizzly.accesswidener")
+}
+
 tasks.withType(JavaCompile).configureEach {
 	// ensure that the encoding is set to UTF-8, no matter what the system default is
 	// this fixes some edge cases with special characters not displaying correctly
@@ -46,9 +50,6 @@ tasks.withType(JavaCompile).configureEach {
 
 	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
 	it.options.release = 17
-}
-
-java {
 }
 
 java {
