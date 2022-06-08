@@ -1,4 +1,4 @@
-<h1 align=center>Grizzly Bear for 1.18</h1>
+<h1 align=center>Grizzly Bear for 1.19</h1>
 <h2 align=center>Fabric required!</h2>
 <ul>
     <li> This mod adds Grizzly Bears to your world!</li>
