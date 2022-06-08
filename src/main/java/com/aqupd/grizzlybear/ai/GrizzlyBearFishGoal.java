@@ -58,7 +58,6 @@ public class GrizzlyBearFishGoal extends MoveToTargetPosGoal {
     }
 
 
-    @Override
     public double getDesiredSquaredDistanceToTarget() {
         return 2D;
     }
@@ -104,7 +103,7 @@ public class GrizzlyBearFishGoal extends MoveToTargetPosGoal {
                 ((GrizzlyBearEntity) this.mob).setWarning(true);
                 upTick--;
             }else {
-                this.mob.getLookControl().lookAt(targetPos.getX(),targetPos.getY(),targetPos.getZ());
+                this.mob.getLookControl().lookAt(targetPos.getX(),targetPos.getY(),targetPos.getZ()); //replace method.
                 stayTick--;
             }
         }

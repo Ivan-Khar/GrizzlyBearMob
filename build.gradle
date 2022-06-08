@@ -36,7 +36,7 @@ processResources {
 		expand "version": project.version
 	}
 }
-
+// remove next update
 loom {
 	accessWidenerPath = file("src/main/resources/aqupdgrizzly.accesswidener")
 }

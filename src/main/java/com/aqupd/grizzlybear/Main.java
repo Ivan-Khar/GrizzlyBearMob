@@ -69,7 +69,7 @@ public class Main implements ModInitializer {
 
 		Registry.register(Registry.ITEM, new Identifier("aqupd", "grizzly_bear_spawn_egg"), GRIZZLY_BEAR_SPAWN_EGG);
 		FabricDefaultAttributeRegistry.register(GRIZZLYBEAR, com.aqupd.grizzlybear.entities.GrizzlyBearEntity.createGrizzlyBearAttributes());
-
+//switch this to using same system to 1.19 version
 		BiomeModifications.addSpawn(
 				selection -> Arrays.stream(biomelist).anyMatch(x -> x.equals(selection.getBiome().getCategory().getName().toUpperCase())),
 				SpawnGroup.CREATURE,
