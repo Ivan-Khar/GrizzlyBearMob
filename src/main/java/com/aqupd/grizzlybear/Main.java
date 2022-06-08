@@ -5,6 +5,7 @@ import com.aqupd.grizzlybear.utils.AqConfig;
 import com.aqupd.grizzlybear.utils.AqDebug;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
+import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
@@ -13,16 +14,13 @@ import net.fabricmc.fabric.mixin.object.builder.SpawnRestrictionAccessor;
 import net.minecraft.entity.*;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.SpawnEggItem;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Heightmap;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.WorldAccess;
 
-import java.util.Arrays;
+import net.minecraft.world.biome.BiomeKeys;
 
 import static com.aqupd.grizzlybear.utils.AqLogger.*;
 
@@ -71,11 +69,14 @@ public class Main implements ModInitializer {
 		FabricDefaultAttributeRegistry.register(GRIZZLYBEAR, com.aqupd.grizzlybear.entities.GrizzlyBearEntity.createGrizzlyBearAttributes());
 //switch this to using same system to 1.19 version
 		BiomeModifications.addSpawn(
-				selection -> Arrays.stream(biomelist).anyMatch(x -> x.equals(selection.getBiome().getCategory().getName().toUpperCase())),
+				BiomeSelectors.includeByKey(BiomeKeys.TAIGA),
 				SpawnGroup.CREATURE,
 				GRIZZLYBEAR,
-				weight, mingroup, maxgroup // weight/min group size/max group size
+				weight,
+				mingroup,
+				maxgroup
 		);
+
 		SpawnRestrictionAccessor.callRegister(GRIZZLYBEAR, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MobEntity::canMobSpawn);
 		logInfo("Grizzly Bears mod is loaded!");
 	}

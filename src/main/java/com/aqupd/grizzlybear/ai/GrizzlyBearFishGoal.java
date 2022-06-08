@@ -57,7 +57,6 @@ public class GrizzlyBearFishGoal extends MoveToTargetPosGoal {
         super.start();
     }
 
-
     public double getDesiredSquaredDistanceToTarget() {
         return 2D;
     }
