@@ -1,11 +1,9 @@
 package com.aqupd.grizzlybear.utils;
 
-import net.minecraft.world.biome.Biome;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Properties;
 
 public class AqDebug {
@@ -28,7 +26,6 @@ public class AqDebug {
             Files.createDirectories(Paths.get("./config/AqMods/"));
             var writer = new FileOutputStream(dfile);
             dfile.createNewFile();
-            aqdebug.setProperty("biome.list", Arrays.toString(Biome.Category.values()));
             aqdebug.store(writer, "All Biometypes for spawnconfiguration");
             writer.close();
         } catch (IOException e) {
