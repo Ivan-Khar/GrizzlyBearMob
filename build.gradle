@@ -40,6 +40,10 @@ processResources {
 		expand "version": project.version
 	}
 }
+// remove next update
+loom {
+	accessWidenerPath = file("src/main/resources/aqupdgrizzly.accesswidener")
+}
 
 tasks.withType(JavaCompile).configureEach {
 	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
