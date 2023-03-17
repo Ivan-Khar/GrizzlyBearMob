@@ -216,11 +216,10 @@ public class GrizzlyBearEntity extends AnimalEntity implements Angerable {
     }
 
     public boolean tryAttack(Entity target) {
-        boolean bl = target.damage(DamageSource.mob(this), (float)((int)this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)));
+        boolean bl = target.damage(this.getDamageSources().mobAttack(this), (float)((int)this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)));
         if (bl) {
             this.applyDamageEffects(this, target);
         }
-
         return bl;
     }
 
