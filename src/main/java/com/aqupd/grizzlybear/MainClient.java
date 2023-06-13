@@ -13,11 +13,11 @@ import net.minecraft.resources.ResourceLocation;
 @Environment(EnvType.CLIENT)
 public class MainClient implements ClientModInitializer {
 
-    public static final ModelLayerLocation MODEL_CUBE_LAYER = new ModelLayerLocation(new ResourceLocation("aqupd", "grizzly_bear"), "main");
+    public static final ModelLayerLocation GRIZZLY_BEAR_LAYER = new ModelLayerLocation(new ResourceLocation("aqupd", "grizzly_bear"), "main");
 
     @Override
     public void onInitializeClient() {
         EntityRendererRegistry.register(Main.GRIZZLYBEAR, GrizzlyBearEntityRenderer::new);
-        EntityModelLayerRegistry.registerModelLayer(MODEL_CUBE_LAYER, GrizzlyBearEntityModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(GRIZZLY_BEAR_LAYER, GrizzlyBearEntityModel::createBodyLayer);
     }
 }
