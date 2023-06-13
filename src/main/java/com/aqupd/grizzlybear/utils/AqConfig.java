@@ -1,7 +1,5 @@
 package com.aqupd.grizzlybear.utils;
 
-import net.minecraft.entity.attribute.EntityAttributes;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;

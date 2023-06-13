@@ -2,29 +2,28 @@ package com.aqupd.grizzlybear.ai;
 
 
 import com.aqupd.grizzlybear.entities.GrizzlyBearEntity;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.ai.goal.MoveToTargetPosGoal;
-import net.minecraft.entity.mob.PathAwareEntity;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.LootTables;
-import net.minecraft.loot.context.LootContext;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.loot.context.LootContextTypes;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldView;
-
 import java.util.List;
-import java.util.Objects;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 
-public class GrizzlyBearFishGoal extends MoveToTargetPosGoal {
+public class GrizzlyBearFishGoal extends MoveToBlockGoal {
     private int upTick;
     private boolean fished = false;
     private int stayTick;
@@ -35,19 +34,19 @@ public class GrizzlyBearFishGoal extends MoveToTargetPosGoal {
     }
 
     @Override
-    protected boolean isTargetPos(WorldView world, BlockPos pos) {
-        return ((world.getBlockState(pos).isOf(Blocks.WATER)) && world.isAir(pos.up()));
+    protected boolean isValidTarget(LevelReader world, BlockPos pos) {
+        return ((world.getBlockState(pos).is(Blocks.WATER)) && world.isEmptyBlock(pos.above()));
     }
 
     @Override
-    protected int getInterval(PathAwareEntity mob) {
+    protected int nextStartTick(PathfinderMob mob) {
         return 1;
     }
 
 
     @Override
-    public boolean canStart() {
-        return !this.mob.isBaby() && this.mob.getRandom().nextInt(6500)==1 && super.canStart();
+    public boolean canUse() {
+        return !this.mob.isBaby() && this.mob.getRandom().nextInt(6500)==1 && super.canUse();
     }
 
     @Override
@@ -64,47 +63,49 @@ public class GrizzlyBearFishGoal extends MoveToTargetPosGoal {
     }
 
     @Override
-    public boolean shouldContinue() {
+    public boolean canContinueToUse() {
         if (fished){
             fished = false;
             return false;
         }
-        return super.shouldContinue() ;
+        return super.canContinueToUse() ;
     }
 
     @Override
     public void tick() {
-        if (this.hasReached() && upTick <= 0){
-            ((GrizzlyBearEntity)this.mob).setWarning(false);
-            LootContext.Builder builder = (new LootContext.Builder((ServerWorld)this.mob.world)).parameter(LootContextParameters.ORIGIN, this.mob.getPos()).parameter(LootContextParameters.THIS_ENTITY, this.mob).random(this.mob.getRandom());
-            LootTable lootTable = Objects.requireNonNull(this.mob.world.getServer()).getLootManager().getTable(LootTables.FISHING_GAMEPLAY);
-            List<ItemStack> list = lootTable.generateLoot(builder.build(LootContextTypes.COMMAND));
+        if (this.isReachedTarget() && upTick <= 0){
+            ((GrizzlyBearEntity)this.mob).setStanding(false);
+
+            LootTable lootTable = this.mob.level().getServer().getLootData().getLootTable(BuiltInLootTables.FISHING);
+            LootParams lootParams = new LootParams.Builder((ServerLevel)this.mob.level()).withParameter(LootContextParams.ORIGIN, this.mob.position()).withParameter(LootContextParams.THIS_ENTITY, this.mob).create(LootContextParamSets.COMMAND);
+            List<ItemStack> list = lootTable.getRandomItems(lootParams);
+
             for (ItemStack itemStack: list) {
-                if (!itemStack.isIn(ItemTags.FISHES) || this.mob.getRandom().nextInt(3)==1) {
-                    ItemEntity itemEntity = new ItemEntity(this.mob.world, this.targetPos.getX(), this.targetPos.getY(), this.targetPos.getZ(), itemStack);
-                    double d = this.mob.getX() - this.targetPos.getX();
-                    double e = this.mob.getY() - this.targetPos.getY();
-                    double f = this.mob.getZ() - this.targetPos.getZ();
-                    itemEntity.setVelocity(d * 0.1D, e * 0.1D + Math.sqrt(Math.sqrt(d * d + e * e + f * f)) * 0.08D, f * 0.1D);
-                    this.mob.world.spawnEntity(itemEntity);
-                    itemEntity.playSound(SoundEvents.ENTITY_ITEM_PICKUP,0.2F,2);
+                if (!itemStack.is(ItemTags.FISHES) || this.mob.getRandom().nextInt(3)==1) {
+                    ItemEntity itemEntity = new ItemEntity(this.mob.level(), this.blockPos.getX(), this.blockPos.getY(), this.blockPos.getZ(), itemStack);
+                    double d = this.mob.getX() - this.blockPos.getX();
+                    double e = this.mob.getY() - this.blockPos.getY();
+                    double f = this.mob.getZ() - this.blockPos.getZ();
+                    itemEntity.setDeltaMovement(d * 0.1D, e * 0.1D + Math.sqrt(Math.sqrt(d * d + e * e + f * f)) * 0.08D, f * 0.1D);
+                    this.mob.level().addFreshEntity(itemEntity);
+                    itemEntity.playSound(SoundEvents.ITEM_PICKUP,0.2F,2);
                 }else {
                     this.mob.heal(2F);
                     for(int i = 0; i < 8; ++i) {
-                        double x = this.mob.getX() +this.targetPos.getX();
+                        double x = this.mob.getX() +this.blockPos.getX();
                         double y = 2.25 + this.mob.getY();
-                        double z = this.targetPos.getZ() + this.mob.getZ();
-                        ((ServerWorld) this.mob.world).spawnParticles(ParticleTypes.END_ROD,x/2,y,z/2,1,0,-0.2F,0,0.2f);
+                        double z = this.blockPos.getZ() + this.mob.getZ();
+                        ((ServerLevel) this.mob.level()).sendParticles(ParticleTypes.END_ROD,x/2,y,z/2,1,0,-0.2F,0,0.2f);
                     }
                 }
             }
             fished = true;
-        } else if (this.hasReached() ){
+        } else if (this.isReachedTarget() ){
             if (stayTick <=0) {
-                ((GrizzlyBearEntity) this.mob).setWarning(true);
+                ((GrizzlyBearEntity) this.mob).setStanding(true);
                 upTick--;
             }else {
-                this.mob.getLookControl().lookAt(targetPos.getX(),targetPos.getY(),targetPos.getZ());
+                this.mob.getLookControl().setLookAt(blockPos.getX(),blockPos.getY(),blockPos.getZ());
                 stayTick--;
             }
         }
