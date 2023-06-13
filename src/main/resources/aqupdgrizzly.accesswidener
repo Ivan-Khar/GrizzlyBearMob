@@ -1,3 +1,1 @@
 accessWidener   v1  named
-accessible method net/minecraft/world/biome/Biome getCategory ()Lnet/minecraft/world/biome/Biome$Category;
-accessible method net/minecraft/client/model/geom/ModelLayers register (Ljava/lang/String;)Lnet/minecraft/client/model/geom/ModelLayerLocation;
