@@ -57,7 +57,6 @@ public class AqConfig {
                 aqprop.setProperty("entity.speed","0.25");
                 aqprop.setProperty("entity.follow","20.0");
                 aqprop.setProperty("entity.damage","6.0");
-                aqprop.setProperty("spawn.biomes","TAIGA");
                 aqprop.store(writer, "Configuration file for Grizzly bear mod");
                 writer.close();
             }

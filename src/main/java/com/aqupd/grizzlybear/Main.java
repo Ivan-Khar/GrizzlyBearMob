@@ -13,8 +13,10 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -22,6 +24,7 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.Heightmap;
 
@@ -33,8 +36,6 @@ public class Main implements ModInitializer {
 	int mingroup = AqConfig.INSTANCE.getNumberProperty("spawn.min");
 	int maxgroup = AqConfig.INSTANCE.getNumberProperty("spawn.max");
 
-	String[] biomelist = AqConfig.INSTANCE.getStringProperty("spawn.biomes").split(",");
-
 	public static final EntityType<GrizzlyBearEntity> GRIZZLYBEAR = Registry.register(
 			BuiltInRegistries.ENTITY_TYPE,
 			new ResourceLocation("aqupd", "grizzly_bear"),
@@ -42,46 +43,36 @@ public class Main implements ModInitializer {
 					GrizzlyBearEntity::new).dimensions(EntityDimensions.scalable(1.4f, 1.4f)).build()
 	);
 
-	public static final ResourceLocation ENTITY_GRIZZLY_BEAR_AMBIENT = new ResourceLocation("aqupd:grizzly_bear.ambient");
-	public static SoundEvent GRIZZLY_BEAR_AMBIENT = SoundEvent.createVariableRangeEvent(ENTITY_GRIZZLY_BEAR_AMBIENT);
-	public static final ResourceLocation ENTITY_GRIZZLY_BEAR_AMBIENT_BABY = new ResourceLocation("aqupd:grizzly_bear.ambient_baby");
-	public static SoundEvent GRIZZLY_BEAR_AMBIENT_BABY = SoundEvent.createVariableRangeEvent(ENTITY_GRIZZLY_BEAR_AMBIENT_BABY);
-	public static final ResourceLocation ENTITY_GRIZZLY_BEAR_DEATH = new ResourceLocation("aqupd:grizzly_bear.death");
-	public static SoundEvent GRIZZLY_BEAR_DEATH = SoundEvent.createVariableRangeEvent(ENTITY_GRIZZLY_BEAR_DEATH);
-	public static final ResourceLocation ENTITY_GRIZZLY_BEAR_HURT = new ResourceLocation("aqupd:grizzly_bear.hurt");
-	public static SoundEvent GRIZZLY_BEAR_HURT = SoundEvent.createVariableRangeEvent(ENTITY_GRIZZLY_BEAR_HURT);
-	public static final ResourceLocation ENTITY_GRIZZLY_BEAR_STEP = new ResourceLocation("aqupd:grizzly_bear.step");
-	public static SoundEvent GRIZZLY_BEAR_STEP = SoundEvent.createVariableRangeEvent(ENTITY_GRIZZLY_BEAR_STEP);
-	public static final ResourceLocation ENTITY_GRIZZLY_BEAR_WARNING = new ResourceLocation("aqupd:grizzly_bear.warning");
-	public static SoundEvent GRIZZLY_BEAR_WARNING = SoundEvent.createVariableRangeEvent(ENTITY_GRIZZLY_BEAR_WARNING);
+	public static SoundEvent GRIZZLY_BEAR_AMBIENT = register("entity.grizzly_bear.ambient");
+	public static SoundEvent GRIZZLY_BEAR_AMBIENT_BABY = register("entity.grizzly_bear.ambient_baby");
+	public static SoundEvent GRIZZLY_BEAR_DEATH = register("entity.grizzly_bear.death");
+	public static SoundEvent GRIZZLY_BEAR_HURT = register("entity.grizzly_bear.hurt");
+	public static SoundEvent GRIZZLY_BEAR_STEP = register("entity.grizzly_bear.step");
+	public static SoundEvent GRIZZLY_BEAR_WARNING = register("entity.grizzly_bear.warning");
 
 	public static final SpawnEggItem GRIZZLY_BEAR_SPAWN_EGG = new SpawnEggItem(GRIZZLYBEAR, 8545340, 4139806, new FabricItemSettings().stacksTo(64));
+
+	public static final TagKey<Biome> GRIZZLY_BEAR_SPAWN_BIOMES = TagKey.create(Registries.BIOME, new ResourceLocation("aqupd", "grizzly_bear_spawning_biomes"));
 
 	@Override
 	public void onInitialize() {
 		ServerWorldEvents.LOAD.register((server, world) -> AqDebug.INSTANCE.startDebug(AqConfig.INSTANCE.getBooleanProperty("debug")));
 
-		Registry.register(BuiltInRegistries.SOUND_EVENT, ENTITY_GRIZZLY_BEAR_AMBIENT, GRIZZLY_BEAR_AMBIENT);
-		Registry.register(BuiltInRegistries.SOUND_EVENT, ENTITY_GRIZZLY_BEAR_AMBIENT_BABY, GRIZZLY_BEAR_AMBIENT_BABY);
-		Registry.register(BuiltInRegistries.SOUND_EVENT, ENTITY_GRIZZLY_BEAR_DEATH, GRIZZLY_BEAR_DEATH);
-		Registry.register(BuiltInRegistries.SOUND_EVENT, ENTITY_GRIZZLY_BEAR_HURT, GRIZZLY_BEAR_HURT);
-		Registry.register(BuiltInRegistries.SOUND_EVENT, ENTITY_GRIZZLY_BEAR_STEP, GRIZZLY_BEAR_STEP);
-		Registry.register(BuiltInRegistries.SOUND_EVENT, ENTITY_GRIZZLY_BEAR_WARNING, GRIZZLY_BEAR_WARNING);
-
 		Registry.register(BuiltInRegistries.ITEM, new ResourceLocation("aqupd", "grizzly_bear_spawn_egg"), GRIZZLY_BEAR_SPAWN_EGG);
-		FabricDefaultAttributeRegistry.register(GRIZZLYBEAR, com.aqupd.grizzlybear.entities.GrizzlyBearEntity.createGrizzlyBearAttributes());
+		FabricDefaultAttributeRegistry.register(GRIZZLYBEAR, GrizzlyBearEntity.createGrizzlyBearAttributes());
 
 		BiomeModifications.addSpawn(
-				BiomeSelectors.includeByKey(Biomes.TAIGA),
-				MobCategory.CREATURE,
-				GRIZZLYBEAR,
-				weight,
-				mingroup,
-				maxgroup
+			biomeSelectionContext -> biomeSelectionContext.hasTag(GRIZZLY_BEAR_SPAWN_BIOMES),
+				MobCategory.CREATURE, GRIZZLYBEAR, weight, mingroup, maxgroup
 		);
 
 		SpawnPlacements.register(GRIZZLYBEAR, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
 		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.SPAWN_EGGS).register(entries -> entries.accept(GRIZZLY_BEAR_SPAWN_EGG));
 		logInfo("Grizzly Bears mod is loaded!");
+	}
+
+	private static SoundEvent register(String id) {
+		SoundEvent soundEvent = SoundEvent.createVariableRangeEvent(new ResourceLocation("aqupd", id));
+		return Registry.register(BuiltInRegistries.SOUND_EVENT, id, soundEvent);
 	}
 }

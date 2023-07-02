@@ -266,7 +266,7 @@ public class GrizzlyBearEntity extends Animal implements NeutralMob {
 
     static {
         WARNING = SynchedEntityData.defineId(GrizzlyBearEntity.class, EntityDataSerializers.BOOLEAN);
-        ANGER_TIME_RANGE = TimeUtil.rangeOfSeconds(20, 39);
+        ANGER_TIME_RANGE = TimeUtil.rangeOfSeconds(angermin, angermax);
         LOVINGFOOD = Ingredient.of(Items.COD, Items.SALMON, Items.SWEET_BERRIES);
     }
 
